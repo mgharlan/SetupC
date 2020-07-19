@@ -16,9 +16,10 @@ class SetupC:
         print(self.makefile)
 
     def start(self):
-        if os.path.exists(self.destination):
+        if os.path.exists(self.destination) or self.destination == '':
+            spacer = '' if self.destination == '' else '/'
             for cpp in self.cpp_files:
-                file = open(f'{self.destination}/{cpp}.cpp', 'w+')
+                file = open(f'{self.destination}{spacer}{cpp}.cpp', 'w+')
 
                 if cpp in self.header_files:
                     file.write(self.cpp_file_content(cpp, True))
@@ -28,7 +29,7 @@ class SetupC:
                 file.close()
 
             for h in self.header_files:
-                file = open(f'{self.destination}/{h}.h', 'w+')
+                file = open(f'{self.destination}{spacer}{h}.h', 'w+')
 
                 if h in self.cpp_files:
                     file.write(self.h_file_content(h, True))
@@ -38,7 +39,7 @@ class SetupC:
                 file.close()
 
             if self.makefile:
-                file = open(f'{self.destination}/Makefile', 'w+')
+                file = open(f'{self.destination}{spacer}Makefile', 'w+')
                 file.write(self.makefile_content())
                 file.close()
 
@@ -120,8 +121,8 @@ def setup_parser():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-dst', '--destination', type=str, default='', help='provide a destination to create project in')
-    parser.add_argument('-cpp', '--cpp_files', nargs='+', type=str, help='provide cpp files to create')
-    parser.add_argument('-hpp', '--header_files', nargs='+', type=str, help='provide header files to create')
+    parser.add_argument('-cpp', '--cpp_files', nargs='+', default=[], type=str, help='provide cpp files to create')
+    parser.add_argument('-hpp', '--header_files', nargs='+', default=[], type=str, help='provide header files to create')
     parser.add_argument('-make', '--makefile', action='store_true', help='create makefile')
 
     return parser.parse_args()
