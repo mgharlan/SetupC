@@ -4,21 +4,21 @@ import os
 
 class SetupC:
     def __init__(self, args):
-        self.directory = args.directory
+        self.destination = args.destination
         self.cpp_files = args.cpp_files
         self.header_files = args.header_files
         self.makefile = args.makefile
 
     def print(self):
-        print(self.directory)
+        print(self.destination)
         print(self.cpp_files)
         print(self.header_files)
         print(self.makefile)
 
     def start(self):
-        if os.path.exists(self.directory):
+        if os.path.exists(self.destination):
             for cpp in self.cpp_files:
-                file = open(f'{self.directory}/{cpp}.cpp', 'w+')
+                file = open(f'{self.destination}/{cpp}.cpp', 'w+')
 
                 if cpp in self.header_files:
                     file.write(self.cpp_file_content(cpp, True))
@@ -28,7 +28,7 @@ class SetupC:
                 file.close()
 
             for h in self.header_files:
-                file = open(f'{self.directory}/{h}.h', 'w+')
+                file = open(f'{self.destination}/{h}.h', 'w+')
 
                 if h in self.cpp_files:
                     file.write(self.h_file_content(h, True))
@@ -38,7 +38,7 @@ class SetupC:
                 file.close()
 
             if self.makefile:
-                file = open(f'{self.directory}/Makefile', 'w+')
+                file = open(f'{self.destination}/Makefile', 'w+')
                 file.write(self.makefile_content())
                 file.close()
 
@@ -119,7 +119,7 @@ class SetupC:
 def setup_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-dir', '--directory', type=str, default='', help='provide a directory to create project in')
+    parser.add_argument('-dst', '--destination', type=str, default='', help='provide a destination to create project in')
     parser.add_argument('-cpp', '--cpp_files', nargs='+', type=str, help='provide cpp files to create')
     parser.add_argument('-hpp', '--header_files', nargs='+', type=str, help='provide header files to create')
     parser.add_argument('-make', '--makefile', action='store_true', help='create makefile')
