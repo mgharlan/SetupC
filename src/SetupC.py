@@ -87,7 +87,7 @@ class SetupC:
         content = 'objects = '
 
         for cpp in self.cpp_files:
-            content = content + '{cpp}.o '
+            content = content + f'{cpp}.o '
             if cpp in self.header_files:
                 cpp_with_h.append(cpp)
             else:
